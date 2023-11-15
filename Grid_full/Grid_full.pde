@@ -1,6 +1,6 @@
 float timeStep = 0.001;
 float time = 0.0;
-float  numberOfColumns= 15;
+float numberOfColumns= 15;
 float cellSize;
 float cellRadius;
 float dotRadius;

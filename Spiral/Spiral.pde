@@ -1,3 +1,5 @@
+PShader superShader;
+
 float timeStep = 0.001;
 float zOff = 0.0;
 float  numberOfColumns= 10;
@@ -21,6 +23,7 @@ boolean shiftedCoords = false;
 boolean spin = false;
 boolean showText = false;
 
+boolean useShader = true;
 boolean overTime = true;
 
 final int ARCHIMEDEAN = 0;
@@ -94,6 +97,10 @@ void setup() {
   maxDotSize = dotRadius * 1.6f;
   centerX = width/2;
   centerY = height/2;
+  if (useShader) {
+    superShader = loadShader("nstvFractal.glsl");
+    superShader.set("iResolution", float(width), float(height), float(0));
+  }
 }
 
 void draw() {
@@ -135,15 +142,20 @@ void draw() {
       -shiftDiff, shiftDiff
       );
 
-    float hue = //degrees(angle + zOff)%360;
-      map( degrees(angle)%360,
-      0,
-      360,
-      200, 300
-      );
+    if (useShader) {
+      superShader.set("iTime", millis() / 1000.0);
+      shader(superShader);
+    } else {
+      float hue = //degrees(angle + zOff)%360;
+        map( degrees(angle)%360,
+        0,
+        360,
+        200, 300
+        );
 
-    if (changeColor) {
-      fill(hue, 0.4, 1);
+      if (changeColor) {
+        fill(hue, 0.4, 1);
+      }
     }
     if (changeSize && shiftedCoords) {
       circle(shiftedX, shiftedY, newDotRadius*2);
